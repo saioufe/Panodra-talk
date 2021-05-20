@@ -1,16 +1,9 @@
-# pandora_talks
+# Pandora TALK
 
-A new Flutter project.
+![logo](https://firebasestorage.googleapis.com/v0/b/fatooshtest.appspot.com/o/talk%20logo%20second.png?alt=media&token=e3a56816-b0c5-499c-bc6c-323159ec8327)
+ 
+##### _Free, Actively maintained, community-driven chat UI implementation Made by [Pandora Devs](https://pandoradevs.com) - 
 
-## Getting Started
+#
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+[![Build Status](https://travis-ci.com/saioufe/Panodra-talk.svg?token=MNJqJFAqd69z9BudzFeZ&branch=master)](https://travis-ci.com/github/saioufe/Panodra-talk) [![Code Factor](https://www.codefactor.io/repository/github/saioufe/panodra-talk/badge/master?s=0e5067aa6430677e1335c664145d9ec5f3fe6ce5)](https://travis-ci.com/github/saioufe/Panodra-talk)
