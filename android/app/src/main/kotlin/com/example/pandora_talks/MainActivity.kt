@@ -1,4 +1,4 @@
-package com.example.pandora_talks
+package com.pandoradevs.talk
 
 import io.flutter.embedding.android.FlutterActivity
 

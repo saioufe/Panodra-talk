@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "419383541438",
+    "firebase_url": "https://fatooshtest.firebaseio.com",
+    "project_id": "fatooshtest",
+    "storage_bucket": "fatooshtest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:419383541438:android:8eee69b54b7c7d09b028ef",
+        "android_client_info": {
+          "package_name": "com.pandoradevs.talk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419383541438-i88anfdhg685blctepmimkeobfv3q0fd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBriLjAKWhP9QEK1JtsY6bv_0Kz9RQ1nNo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419383541438-i88anfdhg685blctepmimkeobfv3q0fd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
