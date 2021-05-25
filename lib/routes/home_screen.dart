@@ -8,6 +8,9 @@ import 'package:pandora_talks/localization/app_localization.dart';
 import 'package:pandora_talks/repository/user_repository.dart';
 import 'package:pandora_talks/repository/user_repository/phone_repository.dart';
 import 'package:pandora_talks/widgets/home_page/login_form.dart';
+import 'package:pandora_talks/widgets/home_page/otp_form.dart';
+import 'package:pandora_talks/widgets/home_page/welcome_page.dart';
+import 'package:pandora_talks/widgets/login_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen();
@@ -47,63 +50,42 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
-        body: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          builder: (context, state) {
-            if (state is AuthenticationSuccess) {
-              loginTransition();
+        body: FutureBuilder(
+          // Initialize FlutterFire:
+          future: _initialization,
+          builder: (context, snapshot) {
+            // Check for errors
+            if (snapshot.hasError) {
+              return Text("something went wrong");
             }
 
-            if (state is AuthenticationRevoked) {
-              logoutTransition();
+            // Once complete, show your application
+            if (snapshot.connectionState == ConnectionState.done) {
+              return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, state) {
+                  if (state is AuthenticationSuccess) {
+                    loginTransition();
+                  }
+
+                  if (state is AuthenticationRevoked) {
+                    logoutTransition();
+                  }
+
+                  return TabBarView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    controller: tabController,
+                    children: const [
+                      LoginPage(),
+                      WelcomePage(),
+                    ],
+                  );
+                },
+              );
             }
 
-            return TabBarView(
-              physics: const NeverScrollableScrollPhysics(),
-              controller: tabController,
-              children: const [
-                _LoginPage(),
-                _WelcomePage(),
-              ],
-            );
+            // Otherwise, show something whilst waiting for initialization to complete
+            return CircularProgressIndicator();
           },
         ));
-  }
-}
-
-class _LoginPage extends StatelessWidget {
-  const _LoginPage();
-  @override
-  Widget build(BuildContext context) {
-    final repository = context.select((UserRepository r) => r);
-    final authBloc = BlocProvider.of<AuthenticationBloc>(context);
-    return Scaffold(
-      body: BlocProvider(
-        child: const LoginForm(),
-        create: (context) =>
-            LoginBloc(userRepository: repository, authenticationBloc: authBloc),
-      ),
-    );
-  }
-}
-
-class _WelcomePage extends StatelessWidget {
-  const _WelcomePage();
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.exit_to_app_outlined),
-            onPressed: () => BlocProvider.of<AuthenticationBloc>(context).add(
-              LoggedOut(),
-            ),
-          )
-        ],
-      ),
-      body: const Center(
-        child: Text("You're logged in"),
-      ),
-    );
   }
 }

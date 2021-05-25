@@ -12,7 +12,7 @@ import 'routes.dart';
 
 void main() {
   runApp(
-    Provider<UserRepository>(
+    Provider<PhoneUserRepository>(
       create: (_) => PhoneUserRepository(),
       builder: (context, child) {
         return MyApp();
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   const MyApp();
   @override
   Widget build(BuildContext context) {
-    final repository = context.select((UserRepository r) => r);
+    final repository = context.select((PhoneUserRepository r) => r);
 
     return BlocProvider<AuthenticationBloc>(
       create: (_) => AuthenticationBloc(repository),
@@ -51,7 +51,6 @@ class MyApp extends StatelessWidget {
           Locale.fromSubtags(languageCode: "ar"),
           Locale.fromSubtags(languageCode: "en"),
         ],
-        home: HomeScreen(),
       ),
     );
   }

@@ -29,6 +29,7 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
+  String phoneNumber = "";
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, data) {
@@ -59,27 +60,35 @@ class _LoginFormState extends State<LoginForm> {
             initialCountryCode: 'IQ',
             onChanged: (phone) {
               print(phone.completeNumber);
+              phoneNumber = phone.completeNumber;
             },
+            countries: ["IQ", "US"],
+            autoValidate: true,
           ),
-          BlocConsumer<LoginBloc, LoginState>(builder: (context, state) {
-            if (state is LoginLoading) {
-              return const CircularProgressIndicator();
-            }
+          BlocConsumer<LoginBloc, LoginState>(
+            builder: (context, state) {
+              if (state is LoginLoading) {
+                return const CircularProgressIndicator();
+              }
 
-            return ElevatedButton(
-              onPressed: () {
-                if (!phoneController.text.isEmpty) {
-                  _loginButtonPressed(context, phoneController.text);
-                }
-              },
-              child: Text("login"),
-            );
-          }, listener: (contex, state) {
-            if (state is LoginFailure) {
-              Toast.show("Something Went Wrong!", context,
-                  duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-            }
-          })
+              return ElevatedButton(
+                onPressed: () {
+                  if (!phoneNumber.isEmpty && phoneNumber != "") {
+                    _loginButtonPressed(context, phoneNumber);
+                  }
+                },
+                child: Text("login"),
+              );
+            },
+            listener: (contex, state) {
+              print("this is the state : " + state.toString());
+              if (state is LoginFailure) {
+                print("make me make me");
+                Toast.show("Something Went Wrong!", context,
+                    duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+              }
+            },
+          )
         ],
       );
     });
