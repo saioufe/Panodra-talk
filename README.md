@@ -1,6 +1,6 @@
 # Pandora TALK
 
-![logo](https://firebasestorage.googleapis.com/v0/b/fatooshtest.appspot.com/o/talks-logo.png?alt=media&token=b79149ce-8d2b-414f-8a23-fcd6c8d8bbc9)
+![logo](https://firebasestorage.googleapis.com/v0/b/pandora-talk.appspot.com/o/talks-logo.png?alt=media&token=52ed23f4-7d97-46bb-b4cd-a90f9b021e08)
  
 ##### _Free, Actively maintained, community-driven chat UI implementation Made by [Pandora Devs](https://pandoradevs.com) - 
 
