@@ -25,14 +25,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     yield const LoginLoading();
 
     try {
-      final success = await userRepository.authenticate(e.phone);
+      final success =
+          await userRepository.authenticate(e.phone).then((value) => {
+                print(
+                  "mr this is the value : " + value.toString(),
+                ),
+              });
 
-      if (success) {
-        authenticationBloc.add(const LoggedIn());
-        yield const LoginInitial();
-      } else {
-        yield const LoginFailure();
-      }
+      // print(success.toString());
+      // if (success) {
+      //   print("i'm success");
+      //   // authenticationBloc.add(const LoggedIn());
+      //   // yield const LoginInitial();
+      // } else {
+      //   print("i'm false");
+      //   //   yield const LoginFailure();
+      // }
 
       // await userRepository.authenticate(e.phone);
 
