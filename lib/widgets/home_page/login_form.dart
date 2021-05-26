@@ -18,14 +18,14 @@ class _LoginFormState extends State<LoginForm> {
   @override
   void initState() {
     phoneController = TextEditingController();
-    // TODO: implement initState
+
     super.initState();
   }
 
   @override
   void dispose() {
     phoneController.dispose();
-    // TODO: implement dispose
+
     super.dispose();
   }
 
@@ -39,57 +39,59 @@ class _LoginFormState extends State<LoginForm> {
         baseWidth = data.maxWidth / 1.4;
       }
 
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(bottom: 50),
-            child: Image.asset(
-              "assets/images/logo.png",
-              width: 100,
-            ),
-          ),
-          IntlPhoneField(
-            controller: phoneController,
-            decoration: InputDecoration(
-              labelText: 'Phone Number',
-              border: OutlineInputBorder(
-                borderSide: BorderSide(),
+      return Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: 50),
+              child: Image.asset(
+                "assets/images/logo.png",
+                width: 100,
               ),
             ),
-            initialCountryCode: 'IQ',
-            onChanged: (phone) {
-              print(phone.completeNumber);
-              phoneNumber = phone.completeNumber;
-            },
-            countries: ["IQ", "US"],
-            autoValidate: true,
-          ),
-          BlocConsumer<LoginBloc, LoginState>(
-            builder: (context, state) {
-              if (state is LoginLoading) {
-                return const CircularProgressIndicator();
-              }
+            IntlPhoneField(
+              controller: phoneController,
+              decoration: InputDecoration(
+                labelText: 'Phone Number',
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(),
+                ),
+              ),
+              initialCountryCode: 'IQ',
+              onChanged: (phone) {
+                print(phone.completeNumber);
+                phoneNumber = phone.completeNumber;
+              },
+              countries: ["IQ", "US"],
+              autoValidate: true,
+            ),
+            BlocConsumer<LoginBloc, LoginState>(
+              builder: (context, state) {
+                if (state is LoginLoading) {
+                  return const CircularProgressIndicator();
+                }
 
-              return ElevatedButton(
-                onPressed: () {
-                  if (!phoneNumber.isEmpty && phoneNumber != "") {
-                    _loginButtonPressed(context, phoneNumber);
-                  }
-                },
-                child: Text("login"),
-              );
-            },
-            listener: (contex, state) {
-              print("this is the state : " + state.toString());
-              if (state is LoginFailure) {
-                print("make me make me");
-                Toast.show("Something Went Wrong!", context,
-                    duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
-              }
-            },
-          )
-        ],
+                return ElevatedButton(
+                  onPressed: () {
+                    if (!phoneNumber.isEmpty && phoneNumber != "") {
+                      _loginButtonPressed(context, phoneNumber);
+                    }
+                  },
+                  child: Text("login"),
+                );
+              },
+              listener: (contex, state) {
+                print("this is the state : " + state.toString());
+                if (state is LoginFailure) {
+                  print("make me make me");
+                  Toast.show("Something Went Wrong!", context,
+                      duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+                }
+              },
+            )
+          ],
+        ),
       );
     });
   }
