@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "454739150640-r7c0724dur146bmp2td6tpnevfc8mu7c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pandoradevs.talk",
+            "certificate_hash": "de16dec9fce0838b8aba438970f51aba76818ebd"
+          }
+        },
+        {
           "client_id": "454739150640-n4014l66komoio8f7no7iebb3otki8ab.apps.googleusercontent.com",
           "client_type": 3
         }
