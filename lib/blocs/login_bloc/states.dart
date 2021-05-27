@@ -16,6 +16,10 @@ class LoginLoading extends LoginState {
   const LoginLoading();
 }
 
+class LoginAuthentication extends LoginState {
+  const LoginAuthentication();
+}
+
 class LoginFailure extends LoginState {
   const LoginFailure();
 }

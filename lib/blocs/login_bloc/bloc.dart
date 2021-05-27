@@ -11,7 +11,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository userRepository;
   final AuthenticationBloc authenticationBloc;
 
-  LoginBloc({@required this.userRepository, @required this.authenticationBloc})
+  LoginBloc({this.userRepository, this.authenticationBloc})
       : super(LoginInitial());
 
   @override
@@ -45,6 +45,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield const LoginFailure();
       } else {
         print("i'm in send");
+        yield const LoginAuthentication();
         authenticationBloc.add(LoggedAuth(
           phone: e.phone,
           verificationId: succes,
@@ -67,11 +68,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       if (succes == "yes") {
         print("user had loggedIn");
-        // authenticationBloc.add(LoggedIn());
-        //  yield const LoginInitial();
+        authenticationBloc.add(LoggedIn());
+        yield const LoginInitial();
       } else if (succes == "no") {
         print("user had loggedOut");
-        //yield const LoginFailure();
+        yield const LoginFailure();
       }
     } on PlatformException {
       yield const LoginFailure();
