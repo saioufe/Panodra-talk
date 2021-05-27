@@ -15,6 +15,13 @@ class AuthenticationBloc
       yield const AuthenticationSuccess();
     }
 
+    if (e is LoggedAuth) {
+      yield AuthenticationSendCode(
+        phone: e.phone,
+        verificationId: e.verificationId,
+      );
+    }
+
     if (e is LoggedOut) {
       yield const AuthenticationLoading();
       await userRepository.logout();

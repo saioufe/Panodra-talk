@@ -19,47 +19,60 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (e is LoginButtonPressed) {
       yield* _loginPressed(e);
     }
+
+    if (e is AuthButtonPressed) {
+      yield* _authPressed(e);
+    }
   }
 
   Stream<LoginState> _loginPressed(LoginEvent e) async* {
     yield const LoginLoading();
 
     try {
-      final succes =
-          await userRepository.authenticate(e.phone).whenComplete(() {
-        print("done ");
-      }).catchError(
+      final succes = await userRepository.authenticate(e.phone).catchError(
         (onError) {
-          print("an error had accured");
+          print("an error had accured in phone authenticate() catch Error : " +
+              onError.toString());
         },
       );
-      // .then((value)  {
-      //   print("this is async*");
-      //   // print("this is then  : " + value.toString());
-      //   // if (value == true) {
-      //   //   authenticationBloc.add(LoggedIn());
-      //   //   print("you are logged in");
-      //   //   yield LoginFailure();
 
-      //   //   // yield const LoginInitial();
-      //   // } else {
-      //   //   authenticationBloc.add(LoggedIn());
-      //   //   print("you are logged out");
-      //   //   yield LoginFailure();
-      //   // }
-      // });
-
-      if (succes) {
+      if (succes == "yes") {
+        print("i'm in yes");
         authenticationBloc.add(LoggedIn());
-        print("you are logged in");
         yield const LoginInitial();
-      } else {
+      } else if (succes == "no") {
+        print("i'm in no");
         yield const LoginFailure();
+      } else {
+        print("i'm in send");
+        authenticationBloc.add(LoggedAuth(
+          phone: e.phone,
+          verificationId: succes,
+        ));
       }
-      print("mr finish me please");
 
       // await userRepository.authenticate(e.phone);
 
+    } on PlatformException {
+      yield const LoginFailure();
+    }
+  }
+
+  Stream<LoginState> _authPressed(LoginEvent e) async* {
+    yield const LoginLoading();
+
+    try {
+      final succes =
+          await userRepository.numberAuthenticate(e.verificationId, e.sms);
+
+      if (succes == "yes") {
+        print("user had loggedIn");
+        // authenticationBloc.add(LoggedIn());
+        //  yield const LoginInitial();
+      } else if (succes == "no") {
+        print("user had loggedOut");
+        //yield const LoginFailure();
+      }
     } on PlatformException {
       yield const LoginFailure();
     }

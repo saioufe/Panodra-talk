@@ -3,7 +3,9 @@ abstract class UserRepository {
 
   String get phoneNumber;
 
-  Future<bool> authenticate(String phone);
+  Future<String> authenticate(String phone);
+
+  Future<String> numberAuthenticate(String verificationId, String smsCode);
 
   //Future<bool> register(String phone);
 

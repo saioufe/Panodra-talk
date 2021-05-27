@@ -7,8 +7,13 @@ class TestUserRepository extends UserRepository {
   const TestUserRepository({this.fakePhone, this.succ});
 
   @override
-  Future<bool> authenticate(String phone) {
-    return Future<bool>.delayed(const Duration(seconds: 1), () => succ);
+  Future<String> authenticate(String phone) {
+    return Future<String>.delayed(const Duration(seconds: 1), succ.toString);
+  }
+
+  @override
+  Future<String> numberAuthenticate(String verificationId, String smsCode) {
+    return Future<String>.delayed(const Duration(seconds: 1), succ.toString);
   }
 
   @override

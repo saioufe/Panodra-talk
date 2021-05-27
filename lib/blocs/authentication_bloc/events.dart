@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
 abstract class AuthenticationEvent extends Equatable {
   const AuthenticationEvent();
@@ -9,6 +10,15 @@ abstract class AuthenticationEvent extends Equatable {
 
 class LoggedIn extends AuthenticationEvent {
   const LoggedIn();
+}
+
+class LoggedAuth extends AuthenticationEvent {
+  final String phone;
+  final String verificationId;
+  const LoggedAuth({
+    @required this.phone,
+    @required this.verificationId,
+  });
 }
 
 class LoggedOut extends AuthenticationEvent {

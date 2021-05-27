@@ -1,19 +1,24 @@
 import 'dart:async';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pandora_talks/blocs/authentication_bloc.dart';
+import 'package:pandora_talks/blocs/login_bloc/bloc.dart';
+import 'package:pandora_talks/blocs/login_bloc/events.dart';
+import 'package:pandora_talks/blocs/login_bloc/states.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:toast/toast.dart';
 
-class PinCodeVerificationScreen extends StatefulWidget {
+class OtpScreen extends StatefulWidget {
   final String phoneNumber;
 
-  PinCodeVerificationScreen(this.phoneNumber);
+  const OtpScreen(this.phoneNumber);
 
   @override
-  _PinCodeVerificationScreenState createState() =>
-      _PinCodeVerificationScreenState();
+  _OtpScreenState createState() => _OtpScreenState();
 }
 
-class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
+class _OtpScreenState extends State<OtpScreen> {
   TextEditingController textEditingController = TextEditingController();
   // ..text = "123456";
 
@@ -47,6 +52,8 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
     );
   }
 
+  String phoneNumber = "0";
+  String verificationId = "0";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -186,53 +193,75 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
               SizedBox(
                 height: 14,
               ),
-              Container(
-                margin:
-                    const EdgeInsets.symmetric(vertical: 16.0, horizontal: 30),
-                child: ButtonTheme(
-                  height: 50,
-                  child: TextButton(
-                    onPressed: () {
-                      formKey.currentState.validate();
-                      // conditions for validating
-                      if (currentText.length != 6 || currentText != "123456") {
-                        errorController.add(ErrorAnimationType
-                            .shake); // Triggering error shake animation
-                        setState(() {
-                          hasError = true;
-                        });
-                      } else {
-                        setState(
-                          () {
-                            hasError = false;
-                            snackBar("OTP Verified!!");
-                          },
-                        );
-                      }
-                    },
-                    child: Center(
-                        child: Text(
-                      "VERIFY".toUpperCase(),
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
-                    )),
-                  ),
-                ),
-                decoration: BoxDecoration(
-                    color: Colors.green,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.green.shade200,
-                          offset: Offset(1, -2),
-                          blurRadius: 5),
-                      BoxShadow(
-                          color: Colors.green.shade200,
-                          offset: Offset(-1, 2),
-                          blurRadius: 5)
-                    ]),
+              BlocConsumer<AuthenticationBloc, AuthenticationState>(
+                builder: (context, state) {
+                  if (state is AuthenticationSendCode) {
+                    phoneNumber = state.phone;
+                    verificationId = state.verificationId;
+                  }
+
+                  return Container(
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 16.0, horizontal: 30),
+                    child: ButtonTheme(
+                      height: 50,
+                      child: TextButton(
+                        onPressed: () {
+                          formKey.currentState.validate();
+                          // conditions for validating
+                          if (currentText.length != 6) {
+                            errorController.add(ErrorAnimationType
+                                .shake); // Triggering error shake animation
+                            setState(() {
+                              hasError = true;
+                            });
+                          } else {
+                            setState(
+                              () {
+                                hasError = false;
+                                _authButtonPressed(
+                                  context,
+                                  currentText,
+                                  verificationId,
+                                );
+                                snackBar("OTP Verified!!");
+                              },
+                            );
+                          }
+                        },
+                        child: Center(
+                            child: Text(
+                          "VERIFY".toUpperCase(),
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        )),
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.green.shade200,
+                              offset: Offset(1, -2),
+                              blurRadius: 5),
+                          BoxShadow(
+                              color: Colors.green.shade200,
+                              offset: Offset(-1, 2),
+                              blurRadius: 5)
+                        ]),
+                  );
+                },
+                listener: (contex, state) {
+                  print("this is the state : " + state.toString());
+                  if (state is LoginFailure) {
+                    print("make me make me");
+                    Toast.show("Something Went Wrong!", context,
+                        duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+                  }
+                },
               ),
               const SizedBox(
                 height: 16,
@@ -243,4 +272,14 @@ class _PinCodeVerificationScreenState extends State<PinCodeVerificationScreen> {
       ),
     );
   }
+}
+
+void _authButtonPressed(
+    BuildContext context, String smsCode, String verificationId) {
+  BlocProvider.of<LoginBloc>(context).add(
+    AuthButtonPressed(
+      smsCode: smsCode,
+      verificationId: verificationId,
+    ),
+  );
 }

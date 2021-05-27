@@ -12,9 +12,10 @@ class PhoneUserRepository extends UserRepository {
       FirebaseAuth.instance.currentUser.phoneNumber ?? "0";
 
   @override
-  Future<bool> authenticate(String phone) async {
-    var completer = Completer<bool>();
+  Future<String> authenticate(String phone) async {
+    var completer = Completer<String>();
     try {
+      print(" start mission");
       await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: phone,
         verificationCompleted: (PhoneAuthCredential credential) async {
@@ -23,37 +24,45 @@ class PhoneUserRepository extends UserRepository {
           // Sign the user in (or link) with the auto-generated credential
 
           await FirebaseAuth.instance.signInWithCredential(credential);
-          completer.complete(true);
+          print("verification Completed mission");
+          completer.complete("yes");
         },
         verificationFailed: (FirebaseAuthException e) {
           if (e.code == 'invalid-phone-number') {
             print('The provided phone number is not valid.');
           }
-          completer.complete(false);
-
+          print("verificationFailed mission");
+          //  completer.completeError(("error of the code mr"));
+          completer.complete("no");
           // Handle other errors
         },
         codeSent: (String verificationId, int resendToken) async {
-          // Update the UI - wait for the user to enter the SMS code
-          String smsCode = 'xxxx';
-          completer.complete(true);
-          // // Create a PhoneAuthCredential with the code
-          // var credential = PhoneAuthProvider.credential(
-          //     verificationId: verificationId, smsCode: smsCode);
-
-          print("code Sent mission");
-          // // Sign the user in (or link) with the credential
-          // await FirebaseAuth.instance.signInWithCredential(credential);
-          // return true;
+          print("send mission");
+          completer.complete(verificationId);
         },
         codeAutoRetrievalTimeout: (String verificationId) {},
       );
     } on FirebaseAuthException catch (e) {
       print(e.message);
-      completer.complete(false);
+      completer.complete("no");
     }
 
     return completer.future;
+  }
+
+  @override
+  Future<String> numberAuthenticate(
+      String verificationId, String smsCode) async {
+    var credential = PhoneAuthProvider.credential(
+        verificationId: verificationId, smsCode: smsCode);
+
+    // // Sign the user in (or link) with the credential
+    try {
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      return "yes";
+    } on FirebaseAuthException {
+      return "no";
+    }
   }
 
   @override

@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   void initState() {
     _initialization = Firebase.initializeApp();
-    tabController = TabController(length: 2, vsync: this);
+    tabController = TabController(length: 3, vsync: this);
     super.initState();
   }
 
@@ -46,6 +46,12 @@ class _HomeScreenState extends State<HomeScreen>
     if (tabController.index != 0) tabController.animateTo(0);
   }
 
+  void sendCodeAuthTransition() {
+    print("start transition");
+    if (tabController.index == 0) tabController.animateTo(2);
+  }
+
+  String phoneNumber = "0";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,12 +77,19 @@ class _HomeScreenState extends State<HomeScreen>
                     logoutTransition();
                   }
 
+                  if (state is AuthenticationSendCode) {
+                    phoneNumber = state.phone;
+
+                    sendCodeAuthTransition();
+                  }
+
                   return TabBarView(
                     physics: const NeverScrollableScrollPhysics(),
                     controller: tabController,
-                    children: const [
+                    children: [
                       LoginPage(),
                       WelcomePage(),
+                      OtpScreen(phoneNumber),
                     ],
                   );
                 },
