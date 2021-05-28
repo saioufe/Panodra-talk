@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pandora_talks/blocs/authentication_bloc/bloc.dart';
+import 'package:pandora_talks/blocs/theme_provider/theme_manager.dart';
 import 'package:pandora_talks/repository/user_repository.dart';
 import 'package:pandora_talks/repository/user_repository/phone_repository.dart';
 import 'package:pandora_talks/routes/home_screen.dart';
@@ -29,29 +30,37 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final repository = context.select((PhoneUserRepository r) => r);
 
-    return BlocProvider<AuthenticationBloc>(
-      create: (_) => AuthenticationBloc(repository),
-      child: MaterialApp(
-        title: 'PandoraTalk',
-        debugShowCheckedModeBanner: false,
-        onGenerateTitle: (context) => "Pandora Talk",
-        initialRoute: RouteGenerator.homePage,
-        onGenerateRoute: RouteGenerator.generateRoute,
-        navigatorKey: RouteGenerator.key,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: ThemeManager(),
         ),
-        localizationsDelegates: [
-          const AppLocalizationDelegate(),
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-        ],
-        supportedLocales: [
-          Locale.fromSubtags(languageCode: "ar"),
-          Locale.fromSubtags(languageCode: "en"),
-        ],
-      ),
+      ],
+      child: BlocProvider<AuthenticationBloc>(
+          create: (_) => AuthenticationBloc(repository),
+          child: Consumer<ThemeManager>(
+            builder: (ctx, theme, _) {
+              return MaterialApp(
+                title: 'PandoraTalk',
+                theme: theme.themeData,
+                debugShowCheckedModeBanner: false,
+                onGenerateTitle: (context) => "Pandora Talk",
+                initialRoute: RouteGenerator.homePage,
+                onGenerateRoute: RouteGenerator.generateRoute,
+                navigatorKey: RouteGenerator.key,
+                localizationsDelegates: [
+                  const AppLocalizationDelegate(),
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                ],
+                supportedLocales: [
+                  Locale.fromSubtags(languageCode: "ar"),
+                  Locale.fromSubtags(languageCode: "en"),
+                ],
+              );
+            },
+          )),
     );
   }
 }

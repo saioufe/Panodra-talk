@@ -16,7 +16,9 @@ class PhoneUserRepository extends UserRepository {
     var completer = Completer<String>();
     try {
       print(" start mission");
+
       await FirebaseAuth.instance.verifyPhoneNumber(
+        timeout: Duration(seconds: 30),
         phoneNumber: phone,
         verificationCompleted: (PhoneAuthCredential credential) async {
           // ANDROID ONLY!

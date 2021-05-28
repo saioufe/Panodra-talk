@@ -55,50 +55,49 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
         body: FutureBuilder(
-          // Initialize FlutterFire:
-          future: _initialization,
-          builder: (context, snapshot) {
-            // Check for errors
-            if (snapshot.hasError) {
-              return Text("something went wrong");
-            }
+      // Initialize FlutterFire:
+      future: _initialization,
+      builder: (context, snapshot) {
+        // Check for errors
+        if (snapshot.hasError) {
+          return Text("something went wrong");
+        }
 
-            // Once complete, show your application
-            if (snapshot.connectionState == ConnectionState.done) {
-              return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, state) {
-                  if (state is AuthenticationSuccess) {
-                    loginTransition();
-                  }
+        // Once complete, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              if (state is AuthenticationSuccess) {
+                loginTransition();
+              }
 
-                  if (state is AuthenticationRevoked) {
-                    logoutTransition();
-                  }
+              if (state is AuthenticationRevoked) {
+                logoutTransition();
+              }
 
-                  if (state is AuthenticationSendCode) {
-                    phoneNumber = state.phone;
+              if (state is AuthenticationSendCode) {
+                phoneNumber = state.phone;
 
-                    sendCodeAuthTransition();
-                  }
+                sendCodeAuthTransition();
+              }
 
-                  return TabBarView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    controller: tabController,
-                    children: [
-                      LoginPage(),
-                      WelcomePage(),
-                      OtpScreen(phoneNumber),
-                    ],
-                  );
-                },
+              return TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: tabController,
+                children: [
+                  LoginPage(),
+                  WelcomePage(),
+                  OtpScreen(phoneNumber),
+                ],
               );
-            }
+            },
+          );
+        }
 
-            // Otherwise, show something whilst waiting for initialization to complete
-            return CircularProgressIndicator();
-          },
-        ));
+        // Otherwise, show something whilst waiting for initialization to complete
+        return CircularProgressIndicator();
+      },
+    ));
   }
 }

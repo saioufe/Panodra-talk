@@ -8,7 +8,9 @@ import 'package:pandora_talks/blocs/login_bloc/events.dart';
 import 'package:pandora_talks/blocs/login_bloc/states.dart';
 import 'package:pandora_talks/repository/user_repository/phone_repository.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:timer_count_down/timer_controller.dart';
 import 'package:toast/toast.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;
@@ -21,6 +23,7 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   TextEditingController textEditingController = TextEditingController();
+
   // ..text = "123456";
 
   // ignore: close_sinks
@@ -33,6 +36,7 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   void initState() {
     errorController = StreamController<ErrorAnimationType>();
+
     super.initState();
   }
 
@@ -55,12 +59,15 @@ class _OtpScreenState extends State<OtpScreen> {
 
   String phoneNumber = "0";
   String verificationId = "0";
+  bool counterFinished = false;
   @override
   Widget build(BuildContext context) {
     final repository = context.select((PhoneUserRepository r) => r);
     final authBloc = BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
-      backgroundColor: Colors.grey.withOpacity(0.1),
+      appBar: AppBar(
+        title: Text(widget.phoneNumber),
+      ),
       body: GestureDetector(
         onTap: () {},
         child: Container(
@@ -69,16 +76,6 @@ class _OtpScreenState extends State<OtpScreen> {
           child: ListView(
             children: <Widget>[
               SizedBox(height: 30),
-              Container(
-                height: MediaQuery.of(context).size.height / 7,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: Image.asset(
-                    "assets/images/logo.png",
-                  ),
-                ),
-              ),
-              SizedBox(height: 8),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8),
@@ -182,15 +179,67 @@ class _OtpScreenState extends State<OtpScreen> {
                     "Didn't receive the code? ",
                     style: TextStyle(color: Colors.black54, fontSize: 15),
                   ),
-                  TextButton(
-                      onPressed: () => snackBar("OTP resend!!"),
-                      child: Text(
-                        "RESEND",
-                        style: TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
-                      ))
+                  counterFinished
+                      ? BlocProvider<LoginBloc>(
+                          create: (_) => LoginBloc(
+                              userRepository: repository,
+                              authenticationBloc: authBloc),
+                          child: BlocConsumer<AuthenticationBloc,
+                              AuthenticationState>(
+                            builder: (ctx, state) {
+                              if (state is AuthenticationSendCode) {
+                                phoneNumber = state.phone;
+                                verificationId = state.verificationId;
+                              }
+
+                              return TextButton(
+                                  onPressed: () => _loginButtonPressed(
+                                      ctx, widget.phoneNumber),
+                                  child: Text(
+                                    "RESEND",
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ));
+                            },
+                            listener: (contex, state) {
+                              print("this is the state : " + state.toString());
+                              if (state is LoginFailure) {
+                                print("make me make me");
+                                Toast.show("Something Went Wrong!", context,
+                                    duration: Toast.LENGTH_SHORT,
+                                    gravity: Toast.BOTTOM);
+                              }
+                            },
+                          ),
+                        )
+                      : Countdown(
+                          seconds: 30,
+                          build: (BuildContext context, double time) =>
+                              RichText(
+                            text: TextSpan(
+                                text: "RESEDN IN : ",
+                                children: [
+                                  TextSpan(
+                                    text: time.toString(),
+                                    style: TextStyle(
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
+                                ],
+                                style: TextStyle(
+                                    color: Colors.black54, fontSize: 15)),
+                            textAlign: TextAlign.center,
+                          ),
+                          interval: Duration(milliseconds: 100),
+                          onFinished: () {
+                            setState(() {
+                              counterFinished = true;
+                            });
+                          },
+                        ),
                 ],
               ),
               SizedBox(
@@ -208,7 +257,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
                     return Container(
                       margin: const EdgeInsets.symmetric(
-                          vertical: 16.0, horizontal: 30),
+                          vertical: 16.0, horizontal: 80),
                       child: ButtonTheme(
                         height: 50,
                         child: TextButton(
@@ -246,18 +295,9 @@ class _OtpScreenState extends State<OtpScreen> {
                         ),
                       ),
                       decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(5),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.green.shade200,
-                                offset: Offset(1, -2),
-                                blurRadius: 5),
-                            BoxShadow(
-                                color: Colors.green.shade200,
-                                offset: Offset(-1, 2),
-                                blurRadius: 5)
-                          ]),
+                        color: Colors.green,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
                     );
                   },
                   listener: (contex, state) {
@@ -288,5 +328,11 @@ void _authButtonPressed(
       smsCode: smsCode,
       verificationId: verificationId,
     ),
+  );
+}
+
+void _loginButtonPressed(BuildContext context, String phone) {
+  BlocProvider.of<LoginBloc>(context).add(
+    LoginButtonPressed(phone: phone),
   );
 }
