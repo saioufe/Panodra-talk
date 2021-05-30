@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,37 +67,57 @@ class _HomeScreenState extends State<HomeScreen>
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
-          return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (context, state) {
-              if (state is AuthenticationSuccess) {
-                loginTransition();
-              }
+          FirebaseAuth.instance.authStateChanges().listen((User user) {
+            if (user == null) {
+              print('User is currently signed out!');
+            } else {
+              print('User is signed in!');
+            }
+          });
 
-              if (state is AuthenticationRevoked) {
-                logoutTransition();
-              }
+          var user = FirebaseAuth.instance.currentUser;
+          if (user == null) {
+            return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+              builder: (context, state) {
+                if (state is AuthenticationSuccess) {
+                  loginTransition();
+                }
 
-              if (state is AuthenticationSendCode) {
-                phoneNumber = state.phone;
+                if (state is AuthenticationRevoked) {
+                  logoutTransition();
+                }
 
-                sendCodeAuthTransition();
-              }
+                if (state is AuthenticationSendCode) {
+                  phoneNumber = state.phone;
 
-              return TabBarView(
-                physics: const NeverScrollableScrollPhysics(),
-                controller: tabController,
-                children: [
-                  LoginPage(),
-                  WelcomePage(),
-                  OtpScreen(phoneNumber),
-                ],
-              );
-            },
-          );
+                  sendCodeAuthTransition();
+                }
+
+                return TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  controller: tabController,
+                  children: [
+                    LoginPage(),
+                    WelcomePage(),
+                    OtpScreen(phoneNumber),
+                  ],
+                );
+              },
+            );
+          } else {
+            return WelcomePage();
+          }
         }
 
         // Otherwise, show something whilst waiting for initialization to complete
-        return CircularProgressIndicator();
+        return Center(
+          child: CircularProgressIndicator(
+            backgroundColor: Theme.of(context).primaryColor,
+            valueColor:
+                AlwaysStoppedAnimation<Color>(Theme.of(context).canvasColor),
+            strokeWidth: 2,
+          ),
+        );
       },
     ));
   }

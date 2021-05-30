@@ -43,7 +43,12 @@ class _LoginFormState extends State<LoginForm> {
       floatingActionButton: BlocConsumer<LoginBloc, LoginState>(
         builder: (context, state) {
           if (state is LoginLoading) {
-            return const CircularProgressIndicator();
+            return CircularProgressIndicator(
+              backgroundColor: Theme.of(context).primaryColor,
+              valueColor:
+                  AlwaysStoppedAnimation<Color>(Theme.of(context).canvasColor),
+              strokeWidth: 2,
+            );
           }
 
           return Container(

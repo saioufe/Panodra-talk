@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -22,6 +23,15 @@ void main() {
   );
 }
 
+// {
+//     @Override
+//     public void onAuthStateChanged(@NonNull FirebaseAuth auth) {
+//         FirebaseUser firebaseUser = auth.getCurrentUser();
+//         if (firebaseUser != null) {
+//             //Do what you need to do
+//         }
+//     }
+// };
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
 
