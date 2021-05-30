@@ -67,13 +67,13 @@ class _HomeScreenState extends State<HomeScreen>
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
-          FirebaseAuth.instance.authStateChanges().listen((User user) {
-            if (user == null) {
-              print('User is currently signed out!');
-            } else {
-              print('User is signed in!');
-            }
-          });
+          // FirebaseAuth.instance.authStateChanges().listen((User user) {
+          //   if (user == null) {
+          //     print('User is currently signed out!');
+          //   } else {
+          //     print('User is signed in!');
+          //   }
+          // });
 
           var user = FirebaseAuth.instance.currentUser;
           if (user == null) {
