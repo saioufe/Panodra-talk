@@ -8,7 +8,7 @@ abstract class LoginEvent extends Equatable {
   const LoginEvent(this.phone, this.verificationId, this.sms);
 
   @override
-  List<Object> get props => [phone];
+  List<Object> get props => [phone, verificationId, sms];
 }
 
 class LoginButtonPressed extends LoginEvent {

@@ -4,13 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pandora_talks/blocs/authentication_bloc.dart';
 import 'package:pandora_talks/blocs/authentication_bloc/bloc.dart';
-import 'package:pandora_talks/blocs/login_bloc/bloc.dart';
-import 'package:pandora_talks/localization/app_localization.dart';
-import 'package:pandora_talks/repository/user_repository.dart';
-import 'package:pandora_talks/repository/user_repository/phone_repository.dart';
-import 'package:pandora_talks/widgets/home_page/login_form.dart';
-import 'package:pandora_talks/widgets/home_page/otp_form.dart';
-import 'package:pandora_talks/widgets/home_page/welcome_page.dart';
+import 'package:pandora_talks/widgets/main_page/login/otp_form.dart';
+import 'package:pandora_talks/widgets/main_page/main_page.dart';
 import 'package:pandora_talks/widgets/login_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -67,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen>
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
+          print("i'm in the ConnectionState.done");
           // FirebaseAuth.instance.authStateChanges().listen((User user) {
           //   if (user == null) {
           //     print('User is currently signed out!');
@@ -77,36 +73,39 @@ class _HomeScreenState extends State<HomeScreen>
 
           var user = FirebaseAuth.instance.currentUser;
           if (user == null) {
-            return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-              builder: (context, state) {
-                if (state is AuthenticationSuccess) {
-                  loginTransition();
-                }
-
-                if (state is AuthenticationRevoked) {
-                  logoutTransition();
-                }
-
-                if (state is AuthenticationSendCode) {
-                  phoneNumber = state.phone;
-
-                  sendCodeAuthTransition();
-                }
-
-                return TabBarView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  controller: tabController,
-                  children: [
-                    LoginPage(),
-                    WelcomePage(),
-                    OtpScreen(phoneNumber),
-                  ],
-                );
-              },
-            );
+            print("this user null");
+            tabController.animateTo(0);
           } else {
-            return WelcomePage();
+            print("this user not null");
+            tabController.animateTo(1);
           }
+          return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              if (state is AuthenticationSuccess) {
+                loginTransition();
+              }
+
+              if (state is AuthenticationRevoked) {
+                logoutTransition();
+              }
+
+              if (state is AuthenticationSendCode) {
+                phoneNumber = state.phone;
+
+                sendCodeAuthTransition();
+              }
+
+              return TabBarView(
+                physics: const NeverScrollableScrollPhysics(),
+                controller: tabController,
+                children: [
+                  LoginPage(),
+                  MainScreen(),
+                  OtpScreen(phoneNumber, tabController),
+                ],
+              );
+            },
+          );
         }
 
         // Otherwise, show something whilst waiting for initialization to complete

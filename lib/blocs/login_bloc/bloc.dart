@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,10 +72,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         authenticationBloc.add(LoggedIn());
         yield const LoginInitial();
       } else if (succes == "no") {
+        yield const LoginFailure();
         print("user had loggedOut");
         yield const LoginFailure();
       }
-    } on PlatformException {
+    } on FirebaseAuthException catch (e) {
+      print("error is  : " + e.toString());
       yield const LoginFailure();
     }
   }

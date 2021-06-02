@@ -14,8 +14,8 @@ import 'package:timer_count_down/timer_count_down.dart';
 
 class OtpScreen extends StatefulWidget {
   final String phoneNumber;
-
-  const OtpScreen(this.phoneNumber);
+  final TabController tabController;
+  const OtpScreen(this.phoneNumber, this.tabController);
 
   @override
   _OtpScreenState createState() => _OtpScreenState();
@@ -305,9 +305,37 @@ class _OtpScreenState extends State<OtpScreen> {
                     if (state is LoginFailure) {
                       print("make me make me");
                       Toast.show("Something Went Wrong!", context,
-                          duration: Toast.LENGTH_SHORT, gravity: Toast.BOTTOM);
+                          duration: Toast.LENGTH_SHORT,
+                          gravity: Toast.BOTTOM,
+                          backgroundColor: Theme.of(context).primaryColor);
                     }
                   },
+                ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8),
+                child: RichText(
+                  text: TextSpan(
+                      text: "This is  not your phone number ?  ",
+                      children: [
+                        TextSpan(
+                            text: " change it",
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                widget.tabController.animateTo(0);
+                                BlocProvider.of<AuthenticationBloc>(context)
+                                    .add(
+                                  LoggedOut(),
+                                );
+                              },
+                            style: TextStyle(
+                                color: Colors.blueAccent,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13)),
+                      ],
+                      style: TextStyle(color: Colors.black54, fontSize: 14)),
+                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(

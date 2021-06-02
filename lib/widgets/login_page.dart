@@ -4,7 +4,7 @@ import 'package:pandora_talks/blocs/authentication_bloc/bloc.dart';
 import 'package:pandora_talks/blocs/login_bloc.dart';
 import 'package:pandora_talks/repository/user_repository/phone_repository.dart';
 
-import 'home_page/login_form.dart';
+import 'main_page/login/login_form.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage();
