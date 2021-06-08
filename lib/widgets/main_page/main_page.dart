@@ -3,13 +3,16 @@ import 'package:pandora_talks/models/chat_bar.dart';
 import 'package:pandora_talks/widgets/main_page/chat_bar.dart';
 import 'package:pandora_talks/widgets/main_page/main_appBar.dart';
 
+import 'drawer.dart';
+
 class MainScreen extends StatelessWidget {
   MainScreen();
 
-  var _key = GlobalKey();
+  GlobalKey<ScaffoldState> _key = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: DrawerWidget(),
       key: _key,
       floatingActionButton: Container(
         decoration: BoxDecoration(
@@ -23,7 +26,7 @@ class MainScreen extends StatelessWidget {
             ),
             onPressed: () {}),
       ),
-      appBar: MainAppBar(context),
+      appBar: MainAppBar(context, _key),
       body: Center(
         child: Container(
           padding: EdgeInsets.all(10),

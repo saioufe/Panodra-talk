@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-AppBar MainAppBar(BuildContext context) {
+AppBar MainAppBar(BuildContext context, GlobalKey<ScaffoldState> theKey) {
   return AppBar(
     actions: [
       Container(
@@ -10,7 +10,12 @@ AppBar MainAppBar(BuildContext context) {
             Container(
               child: IconButton(
                 icon: Icon(Icons.dehaze),
-                onPressed: () {},
+                onPressed: () {
+                  theKey.currentState.openDrawer();
+                },
+                splashRadius: 25,
+                splashColor: Colors.black26,
+                highlightColor: Colors.black12,
               ),
             ),
             Container(
@@ -26,12 +31,15 @@ AppBar MainAppBar(BuildContext context) {
             Expanded(
               child: Container(
                 alignment: Alignment.centerRight,
-                child:
-                    IconButton(icon: const Icon(Icons.search), onPressed: () {}
-                        //  BlocProvider.of<AuthenticationBloc>(context).add(
-                        //   LoggedOut(),
-                        // ),
-                        ),
+                child: IconButton(
+                  icon: const Icon(Icons.search), onPressed: () {},
+                  splashRadius: 25,
+                  splashColor: Colors.black26,
+                  highlightColor: Colors.black12,
+                  //  BlocProvider.of<AuthenticationBloc>(context).add(
+                  //   LoggedOut(),
+                  // ),
+                ),
               ),
             ),
           ],
