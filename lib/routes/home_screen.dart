@@ -62,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen>
 
         // Once complete, show your application
         if (snapshot.connectionState == ConnectionState.done) {
-          print("i'm in the ConnectionState.done");
           // FirebaseAuth.instance.authStateChanges().listen((User user) {
           //   if (user == null) {
           //     print('User is currently signed out!');
@@ -73,10 +72,8 @@ class _HomeScreenState extends State<HomeScreen>
 
           var user = FirebaseAuth.instance.currentUser;
           if (user == null) {
-            print("this user null");
             tabController.animateTo(0);
           } else {
-            print("this user not null");
             tabController.animateTo(1);
           }
           return BlocBuilder<AuthenticationBloc, AuthenticationState>(

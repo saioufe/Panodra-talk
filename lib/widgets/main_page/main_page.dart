@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pandora_talks/models/chat_bar.dart';
 import 'package:pandora_talks/widgets/main_page/chat_bar.dart';
 import 'package:pandora_talks/widgets/main_page/main_appBar.dart';
-
 import 'drawer.dart';
 
 class MainScreen extends StatelessWidget {
