@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../routes.dart';
+
 AppBar MainAppBar(BuildContext context, GlobalKey<ScaffoldState> theKey) {
   return AppBar(
+    leading: new Container(),
     actions: [
       Container(
         width: MediaQuery.of(context).size.width,
@@ -32,7 +35,10 @@ AppBar MainAppBar(BuildContext context, GlobalKey<ScaffoldState> theKey) {
               child: Container(
                 alignment: Alignment.centerRight,
                 child: IconButton(
-                  icon: const Icon(Icons.search), onPressed: () {},
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    Navigator.of(context)?.pushNamed(RouteGenerator.searchPage);
+                  },
                   splashRadius: 25,
                   splashColor: Colors.black26,
                   highlightColor: Colors.black12,

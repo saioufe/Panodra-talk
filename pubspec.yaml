@@ -38,6 +38,8 @@ dependencies:
   country_list_pick: ^1.0.1+4
   firebase_analytics: ^8.1.0
   timer_count_down: ^2.0.1
+  flutter_contact: ^0.8.1+2
+  permission_handler: ^8.0.1
 
 
 
