@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contact/contacts.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -16,6 +17,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void initState() {
     searchController = TextEditingController(text: "");
     listContacts = new List();
+    readContacts("");
     super.initState();
   }
 
@@ -26,9 +28,10 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
-  Future readContacts() async {
+  Future readContacts(String name) async {
     await _getPermission();
-    await Contacts.streamContacts().forEach((contact) {
+    listContacts = [];
+    await Contacts.streamContacts(query: name).forEach((contact) {
       print("${contact.displayName}");
       setState(() {
         listContacts.add(contact);
@@ -39,8 +42,7 @@ class _SearchScreenState extends State<SearchScreen> {
   //Check contacts permission
   Future _getPermission() async {
     final permission = await Permission.contacts.status;
-    if (permission != PermissionStatus.granted &&
-        permission != PermissionStatus.denied) {
+    if (permission != PermissionStatus.denied) {
       final permissionStatus = await [Permission.contacts].request();
       return permissionStatus[Permission.contacts];
     } else {
@@ -54,15 +56,6 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         leading: new Container(),
         actions: [
-          InkWell(
-            onTap: () async {
-              await readContacts();
-              print("saif");
-            },
-            child: Container(
-              child: Icon(Icons.local_dining),
-            ),
-          ),
           Container(
             width: MediaQuery.of(context).size.width,
             child: Row(
@@ -86,8 +79,14 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: InkWell(
                     onTap: () async {},
                     child: Container(
-                        child: TextField(
+                        child: TextFormField(
                       controller: searchController,
+                      onChanged: (name) {
+                        setState(() {
+                          readContacts(name);
+                        });
+                      },
+                      style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         focusColor: Colors.transparent,
                         fillColor: Colors.transparent,
@@ -111,55 +110,58 @@ class _SearchScreenState extends State<SearchScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Text(searchController.text),
             Container(
-              child: (listContacts.length > 0)
-                  ? ListView.builder(
-                      itemCount: listContacts.length,
-                      itemBuilder: (context, index) {
-                        Contact contact = listContacts.get(index);
-                        return Card(
-                          child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: Colors.green,
-                                child: Center(
-                                  child: (contact.avatar != null)
-                                      ? Image.memory(
-                                          contact.avatar,
-                                          height: 28,
-                                          width: 28,
-                                        )
-                                      : Icon(Icons.face),
+                child:
+                    // (listContacts.length > 0)
+                    // ?
+                    ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: listContacts.length,
+                        itemBuilder: (context, index) {
+                          Contact contact = listContacts.get(index);
+                          return Card(
+                            child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: Colors.green,
+                                  child: Center(
+                                    child: (contact.avatar != null)
+                                        ? Image.memory(
+                                            contact.avatar,
+                                            height: 28,
+                                            width: 28,
+                                          )
+                                        : Icon(Icons.face),
+                                  ),
                                 ),
-                              ),
-                              title: Text("${contact.displayName}"),
-                              subtitle: Text((contact.phones.length > 0)
-                                  ? "${contact.phones.get(0)}"
-                                  : "No contact"),
-                              trailing: InkWell(
-                                child: Icon(
-                                  Icons.call,
-                                  color: Colors.green,
-                                ),
-                                onTap: () {
-                                  // _makePhoneCall(
-                                  //     "tel:${contact.phones.length.gcd(0)}");
-                                },
-                              )),
-                        );
-                      })
-                  : Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CircularProgressIndicator(
-                            backgroundColor: Colors.red,
-                          ),
-                          Text("reading Contacts...")
-                        ],
-                      ),
-                    ),
-            ),
+                                title: Text("${contact.displayName}"),
+                                subtitle: Text((contact.phones.length > 0)
+                                    ? "${contact.phones.get(0)}"
+                                    : "No contact"),
+                                trailing: InkWell(
+                                  child: Icon(
+                                    Icons.call,
+                                    color: Colors.green,
+                                  ),
+                                  onTap: () {
+                                    // _makePhoneCall(
+                                    //     "tel:${contact.phones.length.gcd(0)}");
+                                  },
+                                )),
+                          );
+                        })
+                // : Center(
+                //     child: Column(
+                //       mainAxisSize: MainAxisSize.min,
+                //       children: [
+                //         CircularProgressIndicator(
+                //           backgroundColor: Colors.red,
+                //         ),
+                //         Text("reading Contacts...")
+                //       ],
+                //     ),
+                //   ),
+                ),
           ],
         ),
       ),

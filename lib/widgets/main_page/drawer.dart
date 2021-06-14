@@ -12,7 +12,7 @@ class DrawerWidget extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 height: MediaQuery.of(context).size.height / 3.5,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
@@ -45,10 +45,13 @@ class DrawerWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Text(
-                      user.displayName,
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, bottom: 5),
+                      child: Text(
+                        "user.displayName",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
                     ),
                     Text(
                       user.phoneNumber,
