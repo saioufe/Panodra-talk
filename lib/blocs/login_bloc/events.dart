@@ -21,5 +21,10 @@ class AuthButtonPressed extends LoginEvent {
   const AuthButtonPressed({
     @required String smsCode,
     @required String verificationId,
-  }) : super("0", verificationId, smsCode);
+    @required String phone,
+  }) : super(
+          phone,
+          verificationId,
+          smsCode,
+        );
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pandora_talks/blocs/authentication_bloc/bloc.dart';
+import 'package:pandora_talks/blocs/authentication_bloc/events.dart';
 
 import '../../routes.dart';
 

@@ -1,5 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:line_icons/line_icon.dart';
+import 'package:pandora_talks/blocs/authentication_bloc/bloc.dart';
+import 'package:pandora_talks/blocs/authentication_bloc/events.dart';
 
 class DrawerWidget extends StatelessWidget {
   @override
@@ -12,7 +16,7 @@ class DrawerWidget extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 height: MediaQuery.of(context).size.height / 3.5,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
@@ -45,10 +49,13 @@ class DrawerWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Text(
-                      user.displayName,
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                    Container(
+                      margin: EdgeInsets.only(top: 10, bottom: 5),
+                      child: Text(
+                        "user.displayName",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.bold),
+                      ),
                     ),
                     Text(
                       user.phoneNumber,
@@ -61,14 +68,18 @@ class DrawerWidget extends StatelessWidget {
                 children: [
                   DrawerItem(
                     title: "Settings",
-                    icon: Icons.settings_outlined,
+                    titleColor: Colors.black,
+                    icon: Icon(LineIcon.wrench().icon,
+                        size: 30, color: Colors.grey),
                     function: () {
                       print("this is settings");
                     },
                   ),
                   DrawerItem(
                     title: "Invite Friends",
-                    icon: Icons.person_add_alt_1_outlined,
+                    titleColor: Colors.black,
+                    icon: Icon(LineIcon.userPlus().icon,
+                        size: 30, color: Colors.grey),
                     function: () {
                       print("this is Invite Friends");
                     },
@@ -76,9 +87,25 @@ class DrawerWidget extends StatelessWidget {
                   const Divider(),
                   DrawerItem(
                     title: "About Talk's",
-                    icon: Icons.help_outline_rounded,
+                    titleColor: Colors.black,
+                    icon: Icon(LineIcon.questionCircle().icon,
+                        size: 30, color: Colors.grey),
                     function: () {
                       print("this is Invite Talk's About");
+                    },
+                  ),
+                  DrawerItem(
+                    title: "Sign Out",
+                    titleColor: Colors.redAccent,
+                    icon: Icon(
+                      LineIcon.powerOff().icon,
+                      size: 30,
+                      color: Colors.redAccent,
+                    ),
+                    function: () {
+                      BlocProvider.of<AuthenticationBloc>(context).add(
+                        LoggedOut(),
+                      );
                     },
                   ),
                 ],
@@ -93,9 +120,10 @@ class DrawerWidget extends StatelessWidget {
 
 class DrawerItem extends StatelessWidget {
   final String title;
+  final Color titleColor;
   final Function() function;
-  final IconData icon;
-  const DrawerItem({this.title, this.function, this.icon});
+  final Icon icon;
+  const DrawerItem({this.title, this.titleColor, this.function, this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -107,13 +135,14 @@ class DrawerItem extends StatelessWidget {
         height: 60,
         child: Row(
           children: [
-            Icon(icon, size: 30, color: Colors.grey),
+            // Icon(icon, size: 30, color: Colors.grey),
+            icon,
             const SizedBox(
               width: 45,
             ),
             Text(
               title,
-              style: TextStyle(color: Colors.black87, fontSize: 18),
+              style: TextStyle(color: titleColor, fontSize: 18),
             ),
           ],
         ),

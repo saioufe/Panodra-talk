@@ -278,6 +278,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                     ctx,
                                     currentText,
                                     verificationId,
+                                    phoneNumber,
                                   );
                                   // snackBar("OTP Verified!!");
                                 },
@@ -350,11 +351,12 @@ class _OtpScreenState extends State<OtpScreen> {
 }
 
 void _authButtonPressed(
-    BuildContext context, String smsCode, String verificationId) {
+    BuildContext context, String smsCode, String verificationId, String phone) {
   BlocProvider.of<LoginBloc>(context).add(
     AuthButtonPressed(
       smsCode: smsCode,
       verificationId: verificationId,
+      phone: phone,
     ),
   );
 }

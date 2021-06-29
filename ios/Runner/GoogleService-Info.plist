@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>454739150640-ce419katmh6n51l4mc9h0k18l6ahq9h1.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.454739150640-ce419katmh6n51l4mc9h0k18l6ahq9h1</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>454739150640-56akch9cb4821hp3trj25ublp39h7r3b.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyC63j2bzXpQZV10EbapiaHR5u80QJbNSIg</string>
+	<key>GCM_SENDER_ID</key>
+	<string>454739150640</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.pandoradevs.talk</string>
+	<key>PROJECT_ID</key>
+	<string>pandora-talk</string>
+	<key>STORAGE_BUCKET</key>
+	<string>pandora-talk.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:454739150640:ios:302deb60249a201998aaf5</string>
+</dict>
+</plist>

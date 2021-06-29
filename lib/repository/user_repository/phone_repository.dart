@@ -33,7 +33,7 @@ class PhoneUserRepository extends UserRepository {
           if (e.code == 'invalid-phone-number') {
             print('The provided phone number is not valid.');
           }
-          print("verificationFailed mission");
+          print("verificationFailed mission : " + e.toString());
           //  completer.completeError(("error of the code mr"));
           completer.complete("no");
           // Handle other errors

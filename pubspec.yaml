@@ -30,6 +30,7 @@ dependencies:
   provider: ^5.0.0
   firebase_auth: ^1.2.0
   firebase_core: ^1.1.0
+  cloud_firestore: ^2.2.2
   flutter_bloc: ^7.0.0
   intl_phone_field: ^2.0.0
   toast: ^0.1.5
@@ -40,6 +41,9 @@ dependencies:
   timer_count_down: ^2.0.1
   flutter_contact: ^0.8.1+2
   permission_handler: ^8.0.1
+  flutter_sms: ^2.3.1
+  line_icons: ^2.0.1
+  
 
 
 
