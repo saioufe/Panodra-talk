@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pandora_talks/models/chat_bar.dart';
+import 'package:pandora_talks/routes.dart';
 
 class ChatBarTemplate extends StatelessWidget {
   final ChatBar chatBar;
@@ -11,7 +12,10 @@ class ChatBarTemplate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, RouteGenerator.chatPage,
+            arguments: chatBar);
+      },
       child: Column(
         children: [
           Container(
